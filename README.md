@@ -6,16 +6,16 @@ Source code and intermediate outputs for the paper _Efficient aggregate land cov
 ## Overview
 
 This repository consists of several [marimo](https://marimo.io) notebooks:
-- `sentinel2_search.py`: A parameterized notebook that performs a simple content-based search of Sentinel-2 imagery using the [Scene Classification Layer](https://sentiwiki.copernicus.eu/web/s2-processing#S2Processing-L2AAlgorithmsS2-Processing-L2A-Algorithmstrue), with the [Microsoft Planetary Computer API]().
-- `downsampling_analysis.py`: The main notebook, which runs simulated queries against many areas of interest (AoIs) at various spatial resolutions, and analyses the result quality and runtime performance.
-- `spatial_shuffle_analysis.py`: A supplementary notebook demonstrating the effect of spatial distribution on downsampling quality performance.
+- `app/sentinel2_search.py`: A parameterized notebook that performs a simple content-based search of Sentinel-2 imagery using the [Scene Classification Layer](https://sentiwiki.copernicus.eu/web/s2-processing#S2Processing-L2AAlgorithmsS2-Processing-L2A-Algorithmstrue), with the [Microsoft Planetary Computer API]().
+- `app/downsampling_analysis.py`: The main notebook, which runs simulated queries against many areas of interest (AoIs) at various spatial resolutions, and analyses the result quality and runtime performance.
+- `app/spatial_shuffle_analysis.py`: A supplementary notebook demonstrating the effect of spatial distribution on downsampling quality performance.
 
 Other key files:  
-- `utils.py`: A Python module containing utility functions used by the notebooks.
-- `pixi.toml` specifies the project dependencies.
+- `app/utils.py`: A Python module containing utility functions used by the notebooks.
+- `app/pixi.toml` specifies the project dependencies.
 - `docker-compose.yml` and `Dockerfile` provide a containerized environment.
 - `data/dsa_results/*.csv`: Intermediate result files.
-- `aois.gpkg`: The collection of generated AoIs queried against. Optionally exported 
+- `data/aois.gpkg`: The collection of generated AoIs queried against. Optionally exported 
 during analysis.
 
 
