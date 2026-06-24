@@ -11,6 +11,7 @@ with app.setup:
     import marimo as mo
 
     import itertools
+    import os
     from pathlib import Path
     import time
 
@@ -31,6 +32,11 @@ with app.setup:
     import hvplot.pandas
 
     hv.extension("bokeh")
+
+    # Disable GDAL caching of content
+    os.environ["CPL_VSIL_CURL_NON_CACHED"] = "/vsicurl/"
+    os.environ["VSI_CACHE"] = "FALSE"
+    os.environ["GDAL_CACHEMAX"] = "0"
 
 
 @app.cell
@@ -156,6 +162,15 @@ def _():
         "T30TUM": shapely.from_wkt(
             "POLYGON ((-5.363 41.475, -5.393 42.404, -4.154 42.412, -4.116 41.493, -5.363 41.475))"
         ),
+        "T50PQT": shapely.from_wkt(
+            "POLYGON ((118.865 10.784, 118.865 11.714, 119.810 11.714, 119.810 10.784, 118.865 10.784))"
+        ),
+        "palawan_outer_east": shapely.from_wkt(
+            "POLYGON ((119.476 10.991, 119.476 11.208, 119.774 11.208, 119.774 10.991, 119.476 10.991))"
+        ),
+        "palawan_outer_east_small": shapely.from_wkt(
+            "POLYGON ((119.688 11.025, 119.688 11.080, 119.742 11.081, 119.742 11.025, 119.688 11.025))"
+        ),
     }
 
     aoi_groups = {
@@ -166,21 +181,26 @@ def _():
         "rdd_extent": "large",
         "T33UWP": "extra-large",
         "T30TUM": "extra-large",
+        "T50PQT": "extra-large",
+        "palawan_outer_east": "medium",
+        "palawan_outer_east_small": "small",
     }
 
     tile_sizes = {
         # Small
         "stockerau_small": [1000, 2000, 3000, 4000],
         "rdd_west_2a": [1000, 2000, 3000, 4000],
-
+        "palawan_outer_east_small": [1000, 2000, 3000, 4000],
         # Medium
         "stockerau_full": [6000, 8000, 12000],
         "rdd_west_merged": [6000, 8000, 12000],
+        "palawan_outer_east": [6000, 8000, 12000],
         # Large
         "rdd_extent": [8000, 10000, 12000, 20000],
         # Extra-large
         "T33UWP": [20000, 40000, 60000],
         "T30TUM": [20000, 40000, 60000],
+        "T50PQT": [20000, 40000, 60000],
     }
 
     assert base_aois.keys() == aoi_groups.keys() == tile_sizes.keys()
