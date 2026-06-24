@@ -715,15 +715,25 @@ def _(results_3):
     _outlier_threshold = 1.0
     _df = _df[_df["runtime_per_scene"] < _outlier_threshold]
 
+    # Baseline filtering
+    _baseline_pixel_count = 256
+    _df_baseline = _df[_df["Total_pixels"] <= _baseline_pixel_count]
+    _baseline_runtime = _df_baseline["runtime_per_scene"].quantile(0.95)
+    _df = _df[_df["runtime_per_scene"] > _baseline_runtime]
+
     _xtick_formatter = CustomJSTickFormatter(code="return (tick / 1e6) + 'M';")
     _scatter = _df.hvplot.scatter(
         x="Total_pixels",
         y="runtime_per_scene",
         marker="x",
-        title="", # "Query runtime: per-scene mean",
+        title="",  # "Query runtime: per-scene mean",
         xlabel="AoI pixel count",
         ylabel="Runtime (s)",
     ).opts(color="red", size=7, alpha=0.5, xformatter=_xtick_formatter)
+
+    _baseline_scatter = _df_baseline.hvplot.scatter(
+        x="Total_pixels", y="runtime_per_scene", marker="x"
+    ).opts(color="grey", alpha=0.5)
 
     # Linear trend line using scipy
     _slope, _intercept, _r_value, _p_value, _std_err = linregress(
@@ -733,9 +743,11 @@ def _(results_3):
     _trendline = hv.Curve(
         (_df["Total_pixels"], _trendline_y), "Total_pixels", "runtime_per_scene"
     )
-    print(f"Slope: {_slope}, Intercept: {_intercept:.8f}, R²: {_r_value**2:.4f}")
+    print(
+        f"Slope: {_slope}, Intercept: {_intercept:.8f}, R²: {_r_value**2:.4f}, Baseline (s): {_baseline_runtime} N: {len(_df)}, N (excluded; below baseline): {len(_df_baseline)}"
+    )
 
-    _scatter.opts(width=500, height=300) * _trendline
+    _scatter.opts(width=500, height=300) * _baseline_scatter * _trendline
     return
 
 
