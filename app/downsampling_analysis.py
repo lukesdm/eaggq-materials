@@ -27,6 +27,7 @@ with app.setup:
 
     # For visualization
     from bokeh.models import CustomJSTickFormatter
+    import bokeh.themes
     import holoviews as hv
     import holoviews.plotting.bokeh
     import hvplot.pandas
@@ -41,7 +42,26 @@ with app.setup:
 
 @app.cell
 def _():
-    # Post-setup (avoid re-running cells unnecessarily)
+    # Post-setup (avoids re-running cells unnecessarily)
+
+    # Set base plotting style
+    hv.renderer("bokeh").theme = "caliber"
+    theme = bokeh.themes.Theme(
+        json={
+            "attrs": {
+                "Title": {"text_color": "black"},
+                "Axis": {
+                    "axis_label_text_color": "black",
+                    "major_label_text_color": "black",
+                },
+                "Legend": {
+                    "label_text_color": "black",
+                },
+            }
+        }
+    )
+    hv.renderer("bokeh").theme = theme
+
     holoviews.plotting.bokeh.ElementPlot.fontscale = 1.2
     return
 
