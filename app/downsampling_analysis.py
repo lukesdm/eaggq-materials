@@ -528,6 +528,12 @@ def _(DSA_RESULTS_FOLDER, analyze_button, selected_base_aois):
     _dfs = [pd.read_csv(_csv) for _csv in csvs]
 
     results_3 = pd.concat(_dfs)
+
+    # Apply regional AoI grouping
+    results_3["aoi_region"] = ""
+    results_3.loc[results_3["aoi"].str.startswith(("stockerau_", "T33UWP_")), "aoi_region"] = "austria"
+    results_3.loc[results_3["aoi"].str.startswith(("rdd_", "T30TUM_")), "aoi_region"] = "spain"
+    results_3.loc[results_3["aoi"].str.startswith(("palawan_", "T50PQT_")), "aoi_region"] = "phillipines"
     return (results_3,)
 
 
@@ -581,8 +587,8 @@ def _():
 
 @app.cell
 def _(results_3):
-    # Exclude samples with any NoData (and irrelevant full_resolution samples)
-    _filter = (results_3["NoData_pixels"] == 0) & (results_3["resolution"] > 20)
+    # Exclude samples with any NoData
+    _filter = (results_3["NoData_pixels"] == 0)
     results_4 = results_3[_filter]
     return (results_4,)
 
@@ -605,8 +611,8 @@ def _():
 
 @app.cell
 def _(results_4):
-    _maxs = results_4.groupby(["tile_size", "resolution"])["diff_max"].max()
-    _counts = results_4.groupby(["tile_size", "resolution"])["index"].count()
+    _maxs = results_4.groupby(["aoi_region", "tile_size", "resolution"])["diff_max"].max()
+    _counts = results_4.groupby(["aoi_region", "tile_size", "resolution"])["index"].count()
     overall = pd.DataFrame({"max_diff": _maxs, "n_samples": _counts})
     return (overall,)
 
@@ -618,9 +624,14 @@ def _(overall, results_4):
 
 
     _tile_sizes = results_4["tile_size"].unique()
-    _by_resolution = overall["max_diff"].hvplot.line(by="resolution").opts(
+
+    _series_max_diff = (
+        overall["max_diff"].groupby(["resolution", "tile_size"]).max()
+    )
+
+    _by_resolution = _series_max_diff.hvplot.line(by="resolution").opts(
         width=500
-    ) * overall["max_diff"].hvplot.scatter(by="resolution", marker="x").opts(
+    ) * _series_max_diff.hvplot.scatter(by="resolution", marker="x").opts(
         hooks=[set_legend_title("Resolution")],
         title="",
         xlabel="Tile size (m)",
@@ -628,9 +639,9 @@ def _(overall, results_4):
     )
 
 
-    _by_tile_size = overall["max_diff"].hvplot.line(by="tile_size").opts(
+    _by_tile_size = _series_max_diff.hvplot.line(by="tile_size").opts(
         width=500
-    ) * overall["max_diff"].hvplot.scatter(by="tile_size", marker="x").opts(
+    ) * _series_max_diff.hvplot.scatter(by="tile_size", marker="x").opts(
         hooks=[set_legend_title("Tile size")],
         title="",
         xlabel="Resolution (m)",
@@ -689,7 +700,12 @@ def _(overall):
 
     _filtered = overall[overall["max_diff"] < tolerance]
 
-    max_safe_downsampling = _filtered.reset_index(level="resolution")["resolution"].groupby("tile_size").max()
+    max_safe_downsampling = (
+        _filtered.reset_index(level="resolution")["resolution"]
+        .groupby(["aoi_region", "tile_size"])
+        .max()
+    )
+
     max_safe_downsampling
     return (max_safe_downsampling,)
 
@@ -698,7 +714,44 @@ def _(overall):
 def _(max_safe_downsampling):
     # Max. safe downsampling resolution.
     _df = max_safe_downsampling.reset_index()
-    _df.hvplot.scatter(x="tile_size", y="resolution", title="")
+
+    # Convert tile size to categorical (but sorted)
+    # _df = _df.sort_values(by="tile_size")
+    # _df["tile_size"] = _df["tile_size"].astype(int).astype(str)
+
+    # Assign cols for marker style
+    _df["marker"] = ""
+    _df["size"] = 0
+    _df.loc[_df["aoi_region"] == "austria", "marker"] = "circle"
+    _df.loc[_df["aoi_region"] == "spain", "marker"] = "square"
+    _df.loc[_df["aoi_region"] == "phillipines", "marker"] = "triangle"
+    _df.loc[_df["aoi_region"] == "austria", "size"] = 50
+    _df.loc[_df["aoi_region"] == "spain", "size"] = 80
+    _df.loc[_df["aoi_region"] == "phillipines", "size"] = 60
+
+    _df.hvplot.scatter(
+        x="tile_size",
+        y="resolution",
+        title="",
+        color="aoi_region",
+        marker="marker",
+        size="size",
+        width=550,
+        height=300,
+        yticks=_df["resolution"].unique(),
+        logy=True,
+        xticks=_df["tile_size"].unique(),
+        logx=True,
+    ).opts(
+        fill_alpha=0,
+        legend_position="top_left",
+        legend_labels={
+            "phillipines": "Phillipines",
+            "austria": "Austria",
+            "spain": "Spain",
+        },
+        xrotation=45,
+    )
     return
 
 
@@ -767,7 +820,8 @@ def _(results_3):
         f"Slope: {_slope}, Intercept: {_intercept:.8f}, R²: {_r_value**2:.4f}, Baseline (s): {_baseline_runtime} N: {len(_df)}, N (excluded; below baseline): {len(_df_baseline)}"
     )
 
-    _scatter.opts(width=500, height=300) * _baseline_scatter * _trendline
+    runtime_plot = _scatter.opts(width=500, height=300) * _baseline_scatter * _trendline
+    runtime_plot
     return
 
 
