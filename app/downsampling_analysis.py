@@ -53,9 +53,12 @@ def _():
                 "Axis": {
                     "axis_label_text_color": "black",
                     "major_label_text_color": "black",
+                    "axis_label_text_font": "Verdana",
+                    "major_label_text_font": "Verdana",
                 },
                 "Legend": {
                     "label_text_color": "black",
+                    "label_text_font": "Verdana",
                 },
             }
         }
@@ -675,9 +678,10 @@ def _(results_4, ui_res_selector):
         .opts(
             show_legend=False,
             xlabel="Tile size (m)",
+            xrotation=30,
             ylabel="Max. class. error (%)",
             title="",
-            width=540, height=300
+            width=500, height=300
         )
     )
     _boxplot * hv.HLine(y=_tolerance).opts(line_dash="dashed", color="red")
@@ -736,7 +740,7 @@ def _(max_safe_downsampling):
         color="aoi_region",
         marker="marker",
         size="size",
-        width=550,
+        width=500,
         height=300,
         yticks=_df["resolution"].unique(),
         logy=True,
