@@ -533,7 +533,7 @@ def _(DSA_RESULTS_FOLDER, analyze_button, selected_base_aois):
     results_3["aoi_region"] = ""
     results_3.loc[results_3["aoi"].str.startswith(("stockerau_", "T33UWP_")), "aoi_region"] = "austria"
     results_3.loc[results_3["aoi"].str.startswith(("rdd_", "T30TUM_")), "aoi_region"] = "spain"
-    results_3.loc[results_3["aoi"].str.startswith(("palawan_", "T50PQT_")), "aoi_region"] = "phillipines"
+    results_3.loc[results_3["aoi"].str.startswith(("palawan_", "T50PQT_")), "aoi_region"] = "philippines"
     return (results_3,)
 
 
@@ -724,10 +724,10 @@ def _(max_safe_downsampling):
     _df["size"] = 0
     _df.loc[_df["aoi_region"] == "austria", "marker"] = "circle"
     _df.loc[_df["aoi_region"] == "spain", "marker"] = "square"
-    _df.loc[_df["aoi_region"] == "phillipines", "marker"] = "triangle"
+    _df.loc[_df["aoi_region"] == "philippines", "marker"] = "triangle"
     _df.loc[_df["aoi_region"] == "austria", "size"] = 50
     _df.loc[_df["aoi_region"] == "spain", "size"] = 80
-    _df.loc[_df["aoi_region"] == "phillipines", "size"] = 60
+    _df.loc[_df["aoi_region"] == "philippines", "size"] = 60
 
     _df.hvplot.scatter(
         x="tile_size",
@@ -746,7 +746,7 @@ def _(max_safe_downsampling):
         fill_alpha=0,
         legend_position="top_left",
         legend_labels={
-            "phillipines": "Phillipines",
+            "philippines": "philippines",
             "austria": "Austria",
             "spain": "Spain",
         },
