@@ -1,6 +1,6 @@
 # eaggq-materials
 
-Source code and intermediate outputs for the paper _Efficient aggregate land cover queries with cloud-optimized raster formats (extended version)_, by Luke McQuade, Martin Sudmanns and Dirk Tiede, of the [EO Analytics group](https://www.plus.ac.at/geoinformatik/research/research-areas/eo-analytics/?lang=en), Department of Geoinformatics—Z_GIS, University of Salzburg.
+Source code and intermediate outputs for the paper _Efficient semantic content-based image retrieval with cloud-optimized raster formats (extended version)_, by Luke McQuade, Martin Sudmanns and Dirk Tiede, of the [EO Analytics group](https://www.plus.ac.at/geoinformatik/research/research-areas/eo-analytics/?lang=en), Department of Geoinformatics—Z_GIS, University of Salzburg.
 
 
 ## Overview

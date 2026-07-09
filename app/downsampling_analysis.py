@@ -4,7 +4,7 @@ __generated_with = "0.20.2"
 app = marimo.App(width="columns")
 
 with app.setup:
-    # For the paper 'Efficient aggregate land cover queries with cloud-optimized raster formats'
+    # For the paper 'Efficient semantic content-based image retrieval with cloud-optimized raster formats'
     # Authors: Luke McQuade, Martin Sudmanns, Dirk Tiede
     # February 2026
 

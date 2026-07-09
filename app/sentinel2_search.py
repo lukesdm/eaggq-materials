@@ -4,7 +4,7 @@ __generated_with = "0.20.2"
 app = marimo.App(width="medium")
 
 with app.setup:
-    # For the paper 'Efficient aggregate land cover queries with cloud-optimized raster formats'
+    # For the paper 'Efficient semantic content-based image retrieval with cloud-optimized raster formats'
     # Authors: Luke McQuade, Martin Sudmanns, Dirk Tiede
     # February 2026
 
@@ -162,7 +162,13 @@ def _(aoi_gdf, epsg, items, resolution):
 
 @app.cell
 def _(stack):
-    data = stack.compute()
+    stack
+    return
+
+
+@app.cell
+def _(stack):
+    data = stack.compute(scheduler="synchronous")
 
     # Clipping introduces NaN's, which we want to align with SCL's nodata value,
     # otherwise category percentages aren't calculated correctly.
