@@ -1,6 +1,6 @@
 # eaggq-materials
 
-Source code and intermediate outputs for the paper _Efficient semantic content-based image retrieval with cloud-optimized raster formats (extended version)_, by Luke McQuade, Martin Sudmanns and Dirk Tiede, of the [EO Analytics group](https://www.plus.ac.at/geoinformatik/research/research-areas/eo-analytics/?lang=en), Department of Geoinformatics—Z_GIS, University of Salzburg.
+Source code and intermediate outputs for the paper _Efficient semantic content-based image retrieval with cloud-optimized raster formats_, by Luke McQuade, Martin Sudmanns and Dirk Tiede, of the [EO Analytics group](https://www.plus.ac.at/geoinformatik/research/research-areas/eo-analytics/?lang=en), Department of Geoinformatics—Z_GIS, University of Salzburg. (IEEE Geoscience and Remote Sensing Letters, DOI: [10.1109/LGRS.2026.3720762](https://doi.org/10.1109/LGRS.2026.3720762).)
 
 
 ## Overview
